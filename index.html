@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Happy Birthday</title>
+  <style>
+    body {
+      margin: 0;
+      background: #2e2e2e;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Segoe UI', sans-serif;
+      color: #ffa07a;
+    }
+
+    .cake-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 1;
+    }
+
+    .layer {
+      width: 160px;
+      height: 14px;
+      background: linear-gradient(to bottom, #ffe5b4, #f4b183);
+      border-radius: 6px;
+      margin: 3px 0;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+      opacity: 0;
+      transform: translateY(-100px);
+      animation: waveIn 1.5s ease-out forwards;
+    }
+
+    .cream {
+      width: 160px;
+      height: 6px;
+      background: #fffaf3;
+      border-radius: 6px;
+      margin: -3px 0;
+      opacity: 0;
+      transform: translateY(-100px);
+      animation: waveIn 1.5s ease-out forwards;
+    }
+
+    .icing {
+      position: relative;
+      width: 160px;
+      height: 24px;
+      background: #fffaf3;
+      border-radius: 14px 14px 0 0;
+      margin-top: -5px;
+      opacity: 0;
+      animation: appear 1s ease forwards;
+      overflow: visible;
+    }
+
+    .icing::before {
+      content: "";
+      position: absolute;
+      top: 20px;
+      left: 0;
+      width: 100%;
+      height: 30px;
+      background: 
+        radial-gradient(circle at 10% 0%, #fffaf3 15%, transparent 16%),
+        radial-gradient(circle at 35% 0%, #fffaf3 18%, transparent 19%),
+        radial-gradient(circle at 60% 0%, #fffaf3 20%, transparent 21%),
+        radial-gradient(circle at 85% 0%, #fffaf3 15%, transparent 16%);
+      background-repeat: no-repeat;
+      background-size: 25% 100%;
+    }
+
+    .candle {
+      width: 4px;
+      height: 40px;
+      background: #ffffff;
+      border-radius: 2px;
+      position: absolute;
+      top: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      animation: grow 1.2s ease forwards;
+    }
+
+    .flame {
+      position: absolute;
+      top: -72px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8px;
+      height: 14px;
+      background: radial-gradient(ellipse at center, #fffcbf, #ffc107);
+      border-radius: 50%;
+      box-shadow:
+        0 0 12px 6px rgba(255, 230, 120, 0.3),
+        0 0 36px 20px rgba(255, 240, 180, 0.1);
+      opacity: 0;
+      animation:
+        flicker 1.2s infinite ease-in-out alternate,
+        fadeIn 1s ease-out forwards;
+    }
+
+    .plate {
+      width: 180px;
+      height: 8px;
+      background: #fff;
+      margin-top: 12px;
+      border-radius: 3px;
+    }
+
+    h1 {
+      margin-top: 24px;
+      font-size: 22px;
+      font-weight: 500;
+      color: #ffa07a;
+      opacity: 0;
+      transition: opacity 2s ease-in;
+    }
+
+    p {
+      margin: 4px 0 0;
+      font-size: 14px;
+      font-weight: 300;
+      color: #ffd0b3;
+      opacity: 0;
+      transition: opacity 2s ease-in;
+    }
+
+    .visible {
+      opacity: 1 !important;
+    }
+
+    @keyframes appear {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes grow {
+      to {
+        opacity: 1;
+        transform: translateX(-50%) scaleY(1);
+      }
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes flicker {
+      0%   { transform: translateX(-50%) scale(1); opacity: 0.9; }
+      100% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+    }
+
+    @keyframes waveIn {
+      0% {
+        opacity: 0;
+        transform: translateY(-100px) rotate(-3deg);
+      }
+      50% {
+        opacity: 0.7;
+        transform: translateY(10px) rotate(2deg);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) rotate(0deg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cake-wrapper" id="cakeWrapper"></div>
+  <div class="plate"></div>
+  <h1 id="title">happy birthday!</h1>
+  <p id="name">Lovie</p>
+
+  <script>
+    const cakeWrapper = document.getElementById('cakeWrapper');
+    const title = document.getElementById('title');
+    const name = document.getElementById('name');
+    const steps = [];
+
+    for (let i = 0; i < 3; i++) {
+      const layer = document.createElement('div');
+      layer.className = 'layer';
+      layer.style.animationDelay = `${steps.length * 1.2}s`;
+      steps.push(() => cakeWrapper.appendChild(layer));
+
+      if (i < 2) {
+        const cream = document.createElement('div');
+        cream.className = 'cream';
+        cream.style.animationDelay = `${(steps.length + 0.1) * 1.2}s`;
+        steps.push(() => cakeWrapper.appendChild(cream));
+      }
+    }
+
+    const icing = document.createElement('div');
+    icing.className = 'icing';
+    steps.push(() => cakeWrapper.appendChild(icing));
+
+    const candle = document.createElement('div');
+    candle.className = 'candle';
+    steps.push(() => cakeWrapper.appendChild(candle));
+
+    const flame = document.createElement('div');
+    flame.className = 'flame';
+    steps.push(() => cakeWrapper.appendChild(flame));
+
+    steps.push(() => {
+      title.classList.add('visible');
+      name.classList.add('visible');
+    });
+
+    steps.forEach((step, i) => {
+      setTimeout(step, i * 1200);
+    });
+  </script>
+
+</body>
+</html>
